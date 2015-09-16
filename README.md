@@ -1,4 +1,4 @@
-# WAFPHP
+#WAFPHP#
 A php framework for Web Application Firewall.
 
 一个PHP级Web应用防护框架。
@@ -36,3 +36,12 @@ PS:当然，这只是一种思路，适用于某些特殊场景，它并不能�
 \#your WAFPHP path\#/Conf/config.default.php
 
 详细配置请参考配置文件中的备注
+
+github：
+[here](https://github.com/ZoaChou/WAFPHP)
+
+进阶版教程：
+[here](https://www.mudoom.com/Article/show/id/35.html)
+
+高阶版教程：
+[here](https://www.mudoom.com/Article/show/id/36.html)
