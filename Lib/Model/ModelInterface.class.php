@@ -61,18 +61,6 @@ interface ModelInterface{
     public function isWhiteSession($session,$clientIP,$prefix='');
 
     /*
-     * 获取IP黑名单列表
-     * Notice:prefix为空时返回全局黑名单列表
-     */
-    public function getBlackIPList($perPage,$page,$prefix='');
-
-    /*
-     * 获取session白名单列表
-     * Notice:prefix为空时返回全局白名单列表
-     */
-    public function getWhiteSessionList($perPage,$page,$prefix='');
-
-    /*
      * 增加指定IP到黑名单
      * Notice:prefix为空时添加到全局黑名单列表
      */
@@ -96,17 +84,6 @@ interface ModelInterface{
      */
     public function delWhiteSession($session,$prefix='');
 
-    /*
-     * 清空黑名单
-     * Notice:prefix为空时清空全局黑名单列表
-     */
-    public function clearBlackIP($prefix='');
-
-    /*
-     * 清空白名单
-     * Notice:prefix为空时清空全局白名单列表
-     */
-    public function clearWhiteSession($prefix='');
     /*
      * 通用获取指定key方法
      */

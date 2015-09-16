@@ -178,34 +178,6 @@ class Redis implements ModelInterface{
     }
 
     /*
-     * 获取IP黑名单列表，无分页，直接返回全部
-     */
-    public function getBlackIPList($perPage,$page,$prefix=''){
-        !$prefix && $prefix = self::BLACK_LIST_PREFIX;
-        $allBlackIP = $this->_keys($prefix);
-
-        if($allBlackIP){
-            return $this->removePrefix($allBlackIP,self::REDIS_PREFIX.$prefix);
-        }else{
-            return false;
-        }
-    }
-
-    /*
-     * 获取session白名单列表，无分页，直接返回全部
-     */
-    public function getWhiteSessionList($perPage,$page,$prefix=''){
-        !$prefix && $prefix = self::WHITE_LIST_PREFIX;
-        $allWhiteSession = $this->_keys($prefix);
-
-        if($allWhiteSession){
-            return $this->removePrefix($allWhiteSession,self::REDIS_PREFIX.$prefix);
-        }else{
-            return false;
-        }
-    }
-
-    /*
      * 获取session中储存的指定key值
      */
     public function getSessionValue($session,$key){
@@ -272,43 +244,6 @@ class Redis implements ModelInterface{
     public function delWhiteSession($session,$prefix=''){
         !$prefix && $prefix = self::BLACK_LIST_PREFIX;
         if($this->_del($prefix.$session)){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    /*
-     * 清空黑名单
-     */
-    public function clearBlackIP($prefix=''){
-        !$prefix && $prefix = self::BLACK_LIST_PREFIX;
-        $allBlackKeys = $this->getBlackIPList(0,0,$prefix);
-        // 黑名单为空时直接返回
-        if(!$allBlackKeys){
-            return true;
-        }
-
-        if($this->_del($allBlackKeys)){
-            return true;
-        }else{
-            return false;
-        }
-
-    }
-
-    /*
-     * 清空白名单
-     */
-    public function clearWhiteSession($prefix=''){
-        !$prefix && $prefix = self::BLACK_LIST_PREFIX;
-        $allWhiteKeys = $this->getWhiteSessionList(0,0,$prefix);
-        // 白名单为空时直接返回
-        if(!$allWhiteKeys){
-            return true;
-        }
-
-        if($this->_del($allWhiteKeys)){
             return true;
         }else{
             return false;
@@ -402,24 +337,6 @@ class Redis implements ModelInterface{
         }
 
         $value = $this->Redis->hGet($key,$hashKey);
-        if($value){
-            return $value;
-        }else{
-            $this->error = $this->Redis->getLastError();
-            return false;
-        }
-    }
-
-    /*
-     * hash 获取对应key的所有值
-     */
-    private function _hGetAll($key){
-        if(!$key){
-            $this->error = 'Redis hGetAll error:key must need.';
-            return false;
-        }
-
-        $value = $this->Redis->hGetAll($key);
         if($value){
             return $value;
         }else{

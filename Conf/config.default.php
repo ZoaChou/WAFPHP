@@ -8,8 +8,7 @@
 
 return array(
     'WAF_ON' => true,// 开启脚本检测
-    'DEBUG_LEVEL' => 'INFO',// debug等级，DEBUG、INFO、WARN、ERROR,为空为关闭debug
-    'WAF_TPL_ON' => false,// 拦截时使用系统自带模板文件
+    'DEBUG_LEVEL' => 'INFO',// debug等级，DEBUG、INFO、WARN、ERROR,为空时关闭debug
     'MODEL_TYPE' => 'MEMCACHE',// Model模式，MEMCACHE为memcache模式保存，REDIS为redis模式保存，为获得最佳体验建议使用Redis模式
     'WHITE_LIST_LIFETIME' => 300,// 全局白名单有效时间
     'BLACK_LIST_LIFETIME' => 300,// 全局黑名单有效时间

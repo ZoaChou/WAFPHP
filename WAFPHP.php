@@ -340,20 +340,6 @@ class WAFPHP{
     }
 
     /*
-     * 获取当前黑名单列表
-     */
-    public function getBlackList($perPage=20,$page=1){
-        return $this->Model->getBlackList($perPage,$page);
-    }
-
-    /*
-     * 获取当前白名单列表
-     */
-    public function getWhiteList($perPage=20,$page=1){
-        return $this->Model->getWhiteList($perPage,$page);
-    }
-
-    /*
      * 清理系统所占资源，退出系统
      */
     public function quit($checkResult=false){

@@ -123,20 +123,6 @@ class Model{
     }
 
     /*
-     * 获取黑名单列表
-     */
-    public function getBlackList($perPage=10,$page=1,$prefix=''){
-        return $this->Model->getBlackIPList($perPage,$page,$prefix);
-    }
-
-    /*
-     * 获取白名单列表
-     */
-    public function getWhiteList($perPage=10,$page=1,$prefix=''){
-        return $this->Model->getWhiteSessionList($perPage,$page,$prefix);
-    }
-
-    /*
      * 增加指定IP到黑名单
      */
     public function addBlackList($ip,$lifeTime,$prefix=''){
@@ -162,20 +148,6 @@ class Model{
      */
     public function delWhiteList($client,$prefix=''){
         return $this->Model->delWhiteSession($client['session'],$prefix);
-    }
-
-    /*
-     * 清空黑名单
-     */
-    public function clearBlackList($prefix=''){
-        return $this->Model->clearBlackIP($prefix);
-    }
-
-    /*
-     * 清空白名单
-     */
-    public function clearWhiteList($prefix=''){
-        return $this->Model->clearWhiteSession($prefix);
     }
 
     /*
