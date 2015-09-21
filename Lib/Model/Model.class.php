@@ -22,7 +22,7 @@ class Model{
         if(class_exists($modelClass)){
             // 合并系统配置与默认配置，防止因配置缺失导致系统无法正常运行
             if($modelConfig && is_array($modelConfig)){
-                $this->config = array_merge($modelConfig,call_user_func(array($modelClass,'getDefaultConfig')));
+                $this->config = array_merge(call_user_func(array($modelClass,'getDefaultConfig')),$modelConfig);
             }else{
                 $this->config = call_user_func(array($modelClass,'getDefaultConfig'));
             }

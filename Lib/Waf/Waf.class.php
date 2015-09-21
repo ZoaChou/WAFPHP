@@ -36,7 +36,7 @@ class Waf{
     public function addScript($script,$config){
         // 合并系统配置与默认配置
         if($config && is_array($config)){
-            $config = array_merge($config,call_user_func(array($script,'getDefaultConfig')));
+            $config = array_merge(call_user_func(array($script,'getDefaultConfig')),$config);
         }else{
             $config = call_user_func(array($script,'getDefaultConfig'));
         }
