@@ -26,10 +26,10 @@ class WAFPHP{
     const WAF_EXT = '.class.php';// 类文件后缀
     const SESSION_NAME = 'WAFPHP_SESSION_ID';// 系统session ID名称
     const SESSION_LIFETIME = 600;// 系统session的存活时间，存活时间内访问将会刷新存活时间，此时间应长于白名单存活时间
-    const MODEL_CLASS = __NAMESPACE__.'\\Lib\\Model\\';// Model 模块命名空间
-    const WAF_CLASS = __NAMESPACE__.'\\Lib\\Waf\\';// Waf 模块命名空间
-    const CONF_PATH = WAF_ROOT.'Conf'.DIRECTORY_SEPARATOR;
-    const RUNTIME_PATH = WAF_ROOT.'Runtime'.DIRECTORY_SEPARATOR;//  Runtime目录
+    static public $modelClass = null;// Model 模块命名空间
+    static public $wafClass = null;// Waf 模块命名空间
+    static public $configPath = null;// 配置文件目录
+    static public $runtimePath = null;//  Runtime目录
     static private $instance = null;// 当前系统静态示例
     static protected $init = null;// 资源初始化标识，当资源初始化后系统运行结束将自动释放所占资源
     static protected $quit = null;// 系统退出标识
@@ -38,14 +38,6 @@ class WAFPHP{
     private $config = null;// 系统运行配置
     private $resultMsg = null;// 结果的详细信息
     private $registerShutdown = null;// register_shutdown_function的callback钩子，用于系统退出后及时清除callback钩子
-
-    // Model 模式定义，用于选择使用哪种模式保存访问统计
-    const MODEL_TYPE = array(
-        'FILE' => 1,// 文件模式保存
-        'MYSQL' => 2,// mysql模式保存
-        'MEMCACHE' => 3,// memcache模式保存
-        'REDIS' => 4,// redis模式保存
-    );
 
     /* 系统运行所需数据定义 */
 
@@ -57,6 +49,8 @@ class WAFPHP{
      * 系统初始化
      */
     private function __construct($config=''){
+        //兼容PHP5.3，动态定义环境变量
+        self::defineEnv();
         // 确保即使异常退出也能执行quit方法
         $this->registerShutdown = new UnRegisterCallback(array($this, "quit"));
         register_shutdown_function(array($this->registerShutdown, "register"));
@@ -68,6 +62,18 @@ class WAFPHP{
         self::$init = true;
         // 装载系统运行配置，并根据配置执行检测
         $this->setup($config);
+    }
+
+    /*
+     * 兼容PHP5.3，动态定义环境变量
+     */
+    private static function defineEnv(){
+        if(self::$modelClass === null){
+            self::$modelClass = __NAMESPACE__.'\\Lib\\Model\\';
+            self::$wafClass = __NAMESPACE__.'\\Lib\\Waf\\';
+            self::$configPath = WAF_ROOT.'Conf'.DIRECTORY_SEPARATOR;
+            self::$runtimePath = WAF_ROOT.'Runtime'.DIRECTORY_SEPARATOR;
+        }
     }
 
     /*
@@ -114,8 +120,8 @@ class WAFPHP{
      */
     private function setup($config=''){
         // 生成Runtime目录
-        if(!is_dir(self::RUNTIME_PATH) && !mkdir(self::RUNTIME_PATH,0755)){
-            die('Failed to create runtime folders in '.self::RUNTIME_PATH);
+        if(!is_dir(self::$runtimePath) && !mkdir(self::$runtimePath,0755)){
+            die('Failed to create runtime folders in '.self::$runtimePath);
         }
         // 如果传递config则把该config作为本次系统运行配置
         if(!$config || !is_array($config)){
@@ -136,7 +142,7 @@ class WAFPHP{
         // 根据配置实例化Model对应模块
         $modelStartTime = Common::click();
         $modelStartRAM = Common::RAMClick();
-        $modelClass = self::MODEL_CLASS.'Model';
+        $modelClass = self::$modelClass.'Model';
         try{
             $Model = call_user_func(
                 array($modelClass,'getInstance'),
@@ -205,7 +211,7 @@ class WAFPHP{
         // 脚本检测
         $wafStartTime = Common::click();
         $wafStartRAM = Common::RAMClick();
-        $wafClass = self::WAF_CLASS.'Waf';
+        $wafClass = self::$wafClass.'Waf';
         $Waf = new $wafClass();
         // 添加开启的检测脚本进待执行队列
         foreach(Common::getConfig('script_list',$this->config) as $key => $value) {
@@ -213,7 +219,7 @@ class WAFPHP{
             if(!$value){
                 continue;
             }
-            $scriptName = self::WAF_CLASS.ucfirst(strtolower($key));
+            $scriptName = self::$wafClass.ucfirst(strtolower($key));
             $scriptConfig = Common::getConfig('WAF_'.$key.'_CONFIG',$this->config);
             $Waf->addScript($scriptName,$scriptConfig);
         }
@@ -232,7 +238,9 @@ class WAFPHP{
      * 获取当前系统配置文件配置
      */
     public static function getCurrentConfig(){
-        return require_once self::CONF_PATH.constant(WAF_PREFIX.'CONFIG').'.php';
+        //避免未初始化前无法获取配置
+        self::defineEnv();
+        return require_once self::$configPath.constant(WAF_PREFIX.'CONFIG').'.php';
     }
 
     /*

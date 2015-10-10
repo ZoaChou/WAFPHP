@@ -30,7 +30,7 @@ class Log{
         }else{
             $this->debugLevel = 0;
         }
-        $this->logPath = WAFPHP::RUNTIME_PATH.'Logs'.DIRECTORY_SEPARATOR;
+        $this->logPath = WAFPHP::$runtimePath.'Logs'.DIRECTORY_SEPARATOR;
         if(!is_dir($this->logPath) && !mkdir($this->logPath,0755)){
             die('Failed to create logs folders in '.$this->logPath);
         }
