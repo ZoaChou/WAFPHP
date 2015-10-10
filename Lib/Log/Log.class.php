@@ -10,7 +10,7 @@ use WAFPHP\WAFPHP;
 
 
 class Log{
-    const DEBUG_LEVEL = array(
+    static private $logDebugLevel = array(
         'CLOSE' => 0,
         'DEBUG' => 1,
         'INFO' => 2,
@@ -24,7 +24,7 @@ class Log{
     private $logMsg = null;
 
     private function __construct($debugLevel=''){
-        $constLevel = self::DEBUG_LEVEL;
+        $constLevel = self::$logDebugLevel;
         if(isset($constLevel[$debugLevel])){
             $this->debugLevel = $constLevel[$debugLevel];
         }else{
@@ -64,7 +64,7 @@ class Log{
     }
 
     private function storeLog($level,$method,$msg){
-        $constLevel = self::DEBUG_LEVEL;
+        $constLevel = self::$logDebugLevel;
 
         // 等级低于当前配置的debug等级的信息将不保存
         if($constLevel[$level] >= $this->debugLevel){

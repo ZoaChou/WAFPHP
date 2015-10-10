@@ -406,7 +406,7 @@ class UnRegisterCallback{
 
         // 调用callback
         $callback = $this->callback;
-        $callback();
+        call_user_func($callback);
         return true;
     }
 
