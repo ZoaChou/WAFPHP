@@ -396,6 +396,10 @@ class UnRegisterCallback{
         }
     }
 
+    public function UnRegisterCallback($callback){
+        $this->__construct($callback);
+    }
+
     /*
      * callback钩子，当钩子被注销后callback失效
      */

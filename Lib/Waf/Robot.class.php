@@ -148,6 +148,7 @@ class Robot implements WafInterface{
             // 生成验证码
             $verifyCode = $Code->makeVerifyCode(Common::getConfig('verify_code_length',$this->config));
             $Code->ShowVerifyImage($verifyCode);
+            Common::Log()->info(__METHOD__,sprintf('Session[%s] start code challenge with code:%s',$this->client['session'],$verifyCode));
             exit;
         }
 
@@ -168,9 +169,7 @@ class Robot implements WafInterface{
             $Code->ajaxReturnError();
         }
 
-
-
-        Common::Log()->info(__METHOD__,sprintf('Session[%s] start js challenge with code:%s',$this->client['session'],$verifyCode));
+        Common::Log()->info(__METHOD__,sprintf('Session[%s] start code challenge',$this->client['session']));
         $Code->startChallenge();
         exit;
     }
@@ -192,7 +191,7 @@ class Robot implements WafInterface{
             }
             $ipFailure = intval(Common::M()->get($this->client['ip'],self::IP_FAILURE_PREFIX));
             $ipFailure++;
-            if($ipFailure >= Common::getConfig('ip_failure_limit',$this->config)){
+            if($ipFailure > Common::getConfig('ip_failure_limit',$this->config)){
                 // 如果验证失败则在指定挑战失败上限次数后将IP加入全局黑名单
                 $this->wafPHP->addBlackList();
                 // 重置统计信息
