@@ -18,9 +18,16 @@ class BaseChallenge{
     protected $client = null;// 当前客户端请求信息
     protected $error = null;// 错误信息
 
-    public function __construct($client){
+    public final function __construct($client){
         $this->client = $client;
+        $this->init();
     }
+
+    public function BaseChallenge($client){
+        $this->__construct($client);
+    }
+
+    protected function init(){}
 
     /*
      * 生成验证码
@@ -37,7 +44,9 @@ class BaseChallenge{
     /*
      * 检测验证码是否有效
      */
-    public function checkVerify($code){
+    protected function checkVerify($code){
+        // 验证码不区分大小写
+        $code = strtolower($code);
         $checkCode = Common::session(self::ROBOT_CHALLENGE_FLAG);
 
         // 验证码不存在，直接返回
@@ -69,9 +78,11 @@ class BaseChallenge{
     }
 
     /*
-     * 保存校验码至session
+     * 保存验证码至session
      */
     private function setVerify($code){
+        // 验证码不区分大小写
+        $code = strtolower($code);
         // 重置验证码验证失败次数
         Common::session(self::ROBOT_CHALLENGE_VERIFY_TIMES,0);
         if(Common::session(self::ROBOT_CHALLENGE_FLAG,$code)){

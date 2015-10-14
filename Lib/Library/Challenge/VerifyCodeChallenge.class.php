@@ -12,8 +12,15 @@ class VerifyCodeChallenge extends BaseChallenge{
     const CODE_CHALLENGE_FLAG = 'WAFPHP_CODE_CHALLENGE';
     const IMG_SHOW_FLAG = 'WAFPHP_SHOW_VERIFY_IMG';
     const IMG_FONT_SIZE = 25;// 验证码字体大小(px)
-    protected $ttfPath = WAF_ROOT.'Lib'.DIRECTORY_SEPARATOR.'Ttf'.DIRECTORY_SEPARATOR.'VerifyCode.ttf';// 字体文件路径
+    protected $ttfPath = null;// 字体文件路径
     private $fontColor = null;// 验证码字体颜色
+
+    /*
+     * 兼容PHP5.3
+     */
+    protected function init(){
+        $this->ttfPath = WAF_ROOT.'Lib'.DIRECTORY_SEPARATOR.'Ttf'.DIRECTORY_SEPARATOR.'VerifyCode.ttf';
+    }
 
     /*
      * 生成验证码输入页面

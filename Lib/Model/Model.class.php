@@ -18,7 +18,7 @@ class Model{
      */
     private function __construct($modelType,$modelConfig){
         //根据配置初始化Model
-        $modelClass = WAFPHP::MODEL_CLASS.ucfirst(strtolower($modelType));
+        $modelClass = WAFPHP::$modelClass.ucfirst(strtolower($modelType));
         if(class_exists($modelClass)){
             // 合并系统配置与默认配置，防止因配置缺失导致系统无法正常运行
             if($modelConfig && is_array($modelConfig)){

@@ -8,7 +8,14 @@ namespace WAFPHP\Lib\Library\Challenge;
 
 
 class ChineseVerifyCodeChallenge extends VerifyCodeChallenge{
-    protected $ttfPath = WAF_ROOT.'Lib'.DIRECTORY_SEPARATOR.'Ttf'.DIRECTORY_SEPARATOR.'ChineseVerifyCode.ttf';// 中文字体文件路径
+    protected $ttfPath = null;// 中文字体文件路径
+
+    /*
+     * 兼容PHP5.3
+     */
+    protected function init(){
+        $this->ttfPath = WAF_ROOT.'Lib'.DIRECTORY_SEPARATOR.'Ttf'.DIRECTORY_SEPARATOR.'ChineseVerifyCode.ttf';// 中文字体文件路径
+    }
 
     /*
      * 生成中文验证码
