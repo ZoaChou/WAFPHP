@@ -99,7 +99,9 @@ class Robot implements WafInterface{
             case 'code-cn' :
                 $this->CodeChallenge(true);
                 break;
-
+            case 'proof-of-work':
+                $this->ProofOfWorkChallenge();
+                break;
             default :
                 die('Undefined challenge model');
         }
@@ -129,6 +131,27 @@ class Robot implements WafInterface{
         $Js->startChallenge($verifyCode);
         exit;
 
+    }
+
+    /*
+     * 工作量证明挑战
+     */
+    public function ProofOfWorkChallenge(){
+        $ProofOfWork = new Challenge\ProofOfWorkChallenge($this->client);
+        // 如果存在JS挑战验证码且验证通过则加入白名单
+        $checkCode = $ProofOfWork->checkCode();
+
+        // 统计挑战结果
+        if($this->checkCodeCount($checkCode)){
+            return true;
+        }
+
+        // 生成验证码
+        $verifyCode = $ProofOfWork->makeVerifyCode();
+
+        Common::Log()->info(__METHOD__,sprintf('Session[%s] start proof of work challenge with code:%s',$this->client['session'],$verifyCode));
+        $ProofOfWork->startChallenge($verifyCode);
+        exit;
     }
 
     /*

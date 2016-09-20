@@ -9,7 +9,7 @@
 return array(
     'WAF_ON' => true,// 开启脚本检测
     'DEBUG_LEVEL' => 'INFO',// debug等级，DEBUG、INFO、WARN、ERROR,为空时关闭debug
-    'MODEL_TYPE' => 'MEMCACHE',// Model模式，MEMCACHE为memcache模式保存，REDIS为redis模式保存，为获得最佳体验建议使用Redis模式
+    'MODEL_TYPE' => 'Redis',// Model模式，MEMCACHE为memcache模式保存，REDIS为redis模式保存，为获得最佳体验建议使用Redis模式
     'WHITE_LIST_LIFETIME' => 300,// 全局白名单有效时间
     'BLACK_LIST_LIFETIME' => 300,// 全局黑名单有效时间
     //Model配置
@@ -54,9 +54,9 @@ return array(
 
     // 机器人检测脚本配置
     'WAF_ROBOT_CONFIG' => array(
-        'IP_START_CHALLENGE_TIMES' => 0,// 同IP段开启挑战访问次数，在同IP段访问统计有效时间内访问次数超过设定值后开启挑战，为0时首次访问直接开启，该IP客户端段进入黑白名单后统计重置
-        'IP_START_CHALLENGE_LIFETIME' => 3,// 同IP段访问统计有效时间
-        'CHALLENGE_MODEL' => 'code-cn',// 可选挑战模式：js（返回一段js挑战）、code（返回验证码挑战）、code-cn（返回中文验证码挑战）
+        'IP_START_CHALLENGE_TIMES' => 10,// 同IP段开启挑战访问次数，在同IP段访问统计有效时间内访问次数超过设定值后开启挑战，为0时首次访问直接开启，该IP客户端段进入黑白名单后统计重置
+        'IP_START_CHALLENGE_LIFETIME' => 60,// 同IP段访问统计有效时间
+        'CHALLENGE_MODEL' => 'proof-of-work',// 可选挑战模式：js（返回一段js挑战）、code（返回验证码挑战）、code-cn（返回中文验证码挑战）、proof-of-work(工作量证明挑战)
         'WHITE_LIST_TIMEOUT' => 120,// 白名单失效时间，受全局session有效时间影响，session失效后白名单效用随之失效
         'IP_FAILURE_LIFETIME' => 120,// 同IP挑战失败次数统计保留时间，超过时间后失败次数统计将重置，每次挑战失败重新计时
         'IP_FAILURE_LIMIT' => 1000,// 同IP挑战失败上限次数，超过次数后将进入全局黑名单，若该IP有客户端成功则重置失败次数
