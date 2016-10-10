@@ -127,7 +127,7 @@ class Robot implements WafInterface{
         // 生成验证码
         $verifyCode = $Js->makeVerifyCode();
 
-        Common::Log()->info(__METHOD__,sprintf('Session[%s] start js challenge with code:%s',$this->client['session'],$verifyCode));
+        Common::Log()->info(__METHOD__,sprintf('Ip[%s] session[%s] start js challenge with code:%s',$this->client['ip'],$this->client['session'],$verifyCode));
         $Js->startChallenge($verifyCode);
         exit;
 
@@ -149,7 +149,7 @@ class Robot implements WafInterface{
         // 生成验证码
         $verifyCode = $ProofOfWork->makeVerifyCode();
 
-        Common::Log()->info(__METHOD__,sprintf('Session[%s] start proof of work challenge with code:%s',$this->client['session'],$verifyCode));
+        Common::Log()->info(__METHOD__,sprintf('Ip[%s] session[%s] start proof of work challenge with code:%s',$this->client['ip'],$this->client['session'],$verifyCode));
         $ProofOfWork->startChallenge($verifyCode);
         exit;
     }
@@ -171,7 +171,7 @@ class Robot implements WafInterface{
             // 生成验证码
             $verifyCode = $Code->makeVerifyCode(Common::getConfig('verify_code_length',$this->config));
             $Code->ShowVerifyImage($verifyCode);
-            Common::Log()->info(__METHOD__,sprintf('Session[%s] start code challenge with code:%s',$this->client['session'],$verifyCode));
+            Common::Log()->info(__METHOD__,sprintf('Ip[%s] session[%s] start code challenge with code:%s',$this->client['ip'],$this->client['session'],$verifyCode));
             exit;
         }
 
@@ -192,7 +192,7 @@ class Robot implements WafInterface{
             $Code->ajaxReturnError();
         }
 
-        Common::Log()->info(__METHOD__,sprintf('Session[%s] start code challenge',$this->client['session']));
+        Common::Log()->info(__METHOD__,sprintf('Ip[%s] session[%s] start code challenge',$this->client['ip'],$this->client['session']));
         $Code->startChallenge();
         exit;
     }
@@ -206,15 +206,16 @@ class Robot implements WafInterface{
             $this->setWhiteFlag();
             // 重置统计信息
             $this->unsetCount();
-            Common::Log()->info(__METHOD__,sprintf('Session[%s] robot challenge succeed',$this->client['session']));
+            Common::Log()->info(__METHOD__,sprintf('Ip[%s] session[%s] robot challenge succeed',$this->client['ip'],$this->client['session']));
             return true;
         }else{
             if($checkCode === false){
-                Common::Log()->info(__METHOD__,sprintf('Session[%s] robot challenge failure',$this->client['session']));
+                Common::Log()->warn(__METHOD__,sprintf('Ip[%s] session[%s] robot challenge failure',$this->client['ip'],$this->client['session']));
             }
             $ipFailure = intval(Common::M()->get($this->client['ip'],self::IP_FAILURE_PREFIX));
             $ipFailure++;
             if($ipFailure > Common::getConfig('ip_failure_limit',$this->config)){
+                Common::Log()->warn(__METHOD__,sprintf('Ip[%s] robot challenge fail too many times',$this->client['ip']));
                 // 如果验证失败则在指定挑战失败上限次数后将IP加入全局黑名单
                 $this->wafPHP->addBlackList();
                 // 重置统计信息

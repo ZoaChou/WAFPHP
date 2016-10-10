@@ -17,7 +17,7 @@ class Log{
         'WARN' => 3,
         'ERROR' => 4,
     );
-    const LOG_TEMPLATE = '[%s %s/%s]: %s';
+    const LOG_TEMPLATE = '[%s %s %s]: %s';
     private static $instance = null;
     private $logPath = null;
     private $debugLevel = null;
