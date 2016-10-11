@@ -16,7 +16,6 @@ class Waf{
      * 命令链模式执行检测脚本
      */
     public function run($client){
-        // todo debug模式下记录运行详细日志
         unset($script);
         foreach($this->scripts as $key => $script){
             $runner = new $script['script']();
@@ -28,6 +27,8 @@ class Waf{
                 return false;
             }
         }
+
+        return true;
     }
 
     /*

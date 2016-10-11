@@ -179,7 +179,10 @@ class WAFPHP{
     public function runCheck(){
         $checkResult = $this->run();
         $this->quit($checkResult);
-        return $checkResult;
+        if (!$checkResult){
+            header("HTTP/1.0 403 Forbidden");
+            exit();
+        }
     }
 
     /*
@@ -198,14 +201,14 @@ class WAFPHP{
             return true;
         }
 
-        // 黑名单检测，中靶直接返回结果
-        if($this->blackCheck()){
-            return false;
-        }
-
         // 白名单检测，中靶直接返回结果
         if($this->whiteCheck()){
             return true;
+        }
+
+        // 黑名单检测，中靶直接返回结果
+        if($this->blackCheck()){
+            return false;
         }
 
         // 脚本检测
@@ -286,7 +289,7 @@ class WAFPHP{
         // 实时黑名单
         if($this->Model->isBlack($client)){
             $this->resultMsg = 'Client in temporary black list';
-            $this->Log->info(__METHOD__,'The client ip['.$client['ip'].'] was in temporary black list');
+            $this->Log->warn(__METHOD__,'The client ip['.$client['ip'].'] ua['.$client['ua'].'] was in temporary black list');
             return true;
         }else{
             return false;

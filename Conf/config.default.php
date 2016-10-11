@@ -20,29 +20,29 @@ return array(
         'pconnect' => true,// 是否启用长连接
         'lifetime' => 3*60,// 默认key有效时间
     ),
-    // 黑名单IP
-    'BLACK_IP' => array(
-        '127.0.0.2',
-        '127.0.0.3-127.0.0.254'
-    ),
-    // 黑名单UA，支持正则
-    'BLACK_UA' => array(
-        'sqlmap'
-    ),
-    'BLACK_UA_IGNORE_CASE' => true,// 黑名单UA忽略大小写
+
+    // 白名单规则,白名单规则优先于黑名单规则
     'WHITE_IP' => array('127.0.0.2'),// 白名单IP，为范围时以半角"-"分隔，如：127.0.0.1-127.0.0.255
+    // 白名单UA，支持正则
     'WHITE_UA' => array(
         'Baiduspider' => '.*\.baidu\.com',
         'Baidu-YunGuanCe-SLABot' => '.*\.baidu\.com',
         'Googlebot' => '.*\.(googlebot|google)\.com',
         '360Spider' => '.*\.360\.cn',
-        '360JK' => '.*\.360\.cn',
+        '360JK' => '.*',
         'Sosospider' => '.*\.soso\.com',
         'Sogou web spider' => '.*\.sogou\.com',
         'bingbot' => '.*\.(bing|msn)\.com',
+        'yahoo' => '.*\.yahoo\.(net|com)',
     ),// 白名单UA，UA的正则=>DNS反向解析匹配的正则
     'WHITE_UA_IGNORE_CASE' => true,// 白名单UA忽略大小写
     'WHITE_UA_DNS_REVERSE' => false,// 白名单UA开启DNS反向解析，开启后UA在白名单中的IP将进行DNS反向解析认证，第一次响应耗时增加2、3s
+    // 黑名单规则
+    'BLACK_IP' => array('127.0.0.3'),// 黑名单IP，为范围时以半角"-"分隔，如：127.0.0.1-127.0.0.255
+    'BLACK_UA' => array(
+        'sqlmap' => '',
+    ),// 黑名单UA，支持正则
+    'BLACK_UA_IGNORE_CASE' => true,// 黑名单UA忽略大小写
 
     // 检测脚本列表，根据顺序执行脚本检测，true表示开启该脚本检测
     'SCRIPT_LIST' => array(

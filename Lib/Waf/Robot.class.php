@@ -120,8 +120,12 @@ class Robot implements WafInterface{
         $checkCode = $Js->checkCode();
 
         // 统计挑战结果
-        if($this->checkCodeCount($checkCode)){
+        $checkCodeCountResult = $this->checkCodeCount($checkCode);
+        if($checkCodeCountResult === true){
             return true;
+        }elseif ($checkCodeCountResult === false){
+            header("HTTP/1.0 403 Forbidden");
+            exit('Unusual request');
         }
 
         // 生成验证码
@@ -142,14 +146,18 @@ class Robot implements WafInterface{
         $checkCode = $ProofOfWork->checkCode();
 
         // 统计挑战结果
-        if($this->checkCodeCount($checkCode)){
+        $checkCodeCountResult = $this->checkCodeCount($checkCode);
+        if($checkCodeCountResult === true){
             return true;
+        }elseif ($checkCodeCountResult === false){
+            header("HTTP/1.0 403 Forbidden");
+            exit('Unusual request');
         }
 
         // 生成验证码
         $verifyCode = $ProofOfWork->makeVerifyCode();
 
-        Common::Log()->info(__METHOD__,sprintf('Ip[%s] session[%s] start proof of work challenge with code:%s',$this->client['ip'],$this->client['session'],$verifyCode));
+        Common::Log()->info(__METHOD__,sprintf('Ip[%s] UA[%s] session[%s] start proof of work challenge with code:%s',$this->client['ip'],$this->client['ua'],$this->client['session'],$verifyCode));
         $ProofOfWork->startChallenge($verifyCode);
         exit;
     }
@@ -220,6 +228,7 @@ class Robot implements WafInterface{
                 $this->wafPHP->addBlackList();
                 // 重置统计信息
                 $this->unsetCount();
+                return false;
             }else{
                 // 累加该IP挑战失败次数
                 Common::M()->set(
@@ -228,8 +237,8 @@ class Robot implements WafInterface{
                     Common::getConfig('ip_failure_lifetime',$this->config),
                     self::IP_FAILURE_PREFIX
                 );
+                return null;
             }
-            return false;
         }
     }
 

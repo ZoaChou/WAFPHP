@@ -168,22 +168,20 @@ class Common{
                 $value = strtolower($value);
             }
 
-            // 不需要DNS反向解析
-            if(!$dnsReverse){
-                if(preg_match('/'.$value.'/',$ua)){
+            if(preg_match('/'.$key.'/',$ua)){
+                // 不需要DNS反向解析
+                if(!$dnsReverse) {
                     return true;
                 }
-            }else{
-                if(preg_match('/'.$key.'/',$ua)){
-                    // DNS反向解析
-                    $host = gethostbyaddr($ip);
-                    if($ignoreCase){
-                        $host = strtolower($host);
-                    }
-                    // 匹配DNS反向解析的结果是否正确
-                    if(preg_match('/'.$value.'/',$host)){
-                        return true;
-                    }
+
+                // DNS反向解析
+                $host = gethostbyaddr($ip);
+                if($ignoreCase){
+                    $host = strtolower($host);
+                }
+                // 匹配DNS反向解析的结果是否正确
+                if(preg_match('/'.$value.'/',$host)){
+                    return true;
                 }
             }
 
