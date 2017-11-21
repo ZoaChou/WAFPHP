@@ -8,5 +8,12 @@
             "email": "dongyunli619@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        
+    },
+    "autoload": {
+        "classmap": [
+            "/"
+        ]
+    }
 }
