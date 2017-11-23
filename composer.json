@@ -1,19 +1,12 @@
 {
     "name": "doylee/wafphp",
-    "description": "A php framework for Web Application Firewall.",
-    "license": "MPL2.0",
+    "type": "library",
+    "license": "GPL2.0",
     "authors": [
         {
             "name": "doylee",
             "email": "dongyunli619@gmail.com"
         }
     ],
-    "require": {
-        
-    },
-    "autoload": {
-        "classmap": [
-            "/"
-        ]
-    }
+    "require": {}
 }
