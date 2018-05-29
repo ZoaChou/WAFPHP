@@ -1,5 +1,7 @@
-#WAFPHP#
+# WAFPHP
 A php framework for Web Application Firewall.
+___
+***此版本为ZoaChou/WAFPHP  Fork下来的版本，除了添加composer.json外几乎未修改***
 
 一个PHP级Web应用防护框架。
 
