@@ -1,0 +1,13 @@
+{
+  "name": "doylee/wafphp",
+  "type": "library",
+  "license": "GPL-2.0",
+  "authors": [
+    {
+      "name": "doylee",
+      "email": "dongyunli619@gmail.com"
+    }
+  ],
+  "description": "",
+  "require": {}
+}

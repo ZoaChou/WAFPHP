@@ -1,1 +1,4 @@
 Runtime/*
+.idea/
+/vendor/
+/nbproject/
